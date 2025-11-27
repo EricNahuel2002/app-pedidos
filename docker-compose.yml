@@ -89,3 +89,9 @@ services:
       ConnectionStrings__DefaultConnection: Server=mysql;Database=db_usuarios;Uid=admin;Pwd=root;
     depends_on:
       - mysql
+
+networks:
+    pedidos-net:
+        
+volumes:
+    mysql-data:

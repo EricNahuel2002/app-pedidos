@@ -4,26 +4,23 @@
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 USER $APP_UID
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 5000
 
-
-# Esta fase se usa para compilar el proyecto de servicio
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-COPY ["src/Ordenes/Ordenes.csproj", "src/Ordenes/"]
-RUN dotnet restore "./src/Ordenes/Ordenes.csproj"
-COPY . .
-WORKDIR "/src/src/Ordenes"
-RUN dotnet build "./Ordenes.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# Esta fase se usa para publicar el proyecto de servicio que se copiará en la fase final.
+
+WORKDIR /app-root
+COPY AppPedidos.sln .
+COPY src/ .
+RUN dotnet restore "AppPedidos.sln"
+RUN dotnet build "src/Ordenes/Ordenes.csproj"
+
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Ordenes.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# Esta fase se usa en producción o cuando se ejecuta desde VS en modo normal (valor predeterminado cuando no se usa la configuración de depuración)
+RUN dotnet publish "src/Ordenes/Ordenes.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
