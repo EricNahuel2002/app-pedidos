@@ -11,10 +11,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("9858c909-d2a5-4622-8ae7-0a5369ff2551")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("Notificaciones")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ff13ad43b88c467edceb34938f3828c3ad8bfb88")]
 [assembly: System.Reflection.AssemblyProductAttribute("Notificaciones")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Notificaciones")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

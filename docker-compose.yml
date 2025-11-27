@@ -1,0 +1,91 @@
+services:
+
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_USER : admin
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: masterdb
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+        - mysql-data:/var/lib/mysql
+    networks:
+        - pedidos-net
+
+  apigateway:
+    image: ${DOCKER_REGISTRY-}apigateway
+    build:
+      context: .
+      dockerfile: src/ApiGateway/Dockerfile
+    ports:
+        - "5000:5000"
+    container_name: ApiGateway
+    depends_on:
+      - menus
+      - notificaciones
+      - ordenes
+      - usuarios
+    networks:
+        - pedidos-net
+    
+
+  menus:
+    image: ${DOCKER_REGISTRY-}menus
+    build:
+      context: .
+      dockerfile: src/Menus/Dockerfile
+    ports:
+        - "5001:5000"
+    container_name: Menus
+    networks:
+        - pedidos-net
+    environment:
+      ConnectionStrings__DefaultConnection: Server=mysql;Database=db_menus;Uid=admin;Pwd=root;
+    depends_on:
+      - mysql
+
+
+  notificaciones:
+    image: ${DOCKER_REGISTRY-}notificaciones
+    build:
+      context: .
+      dockerfile: src/Notificaciones/Dockerfile
+    ports:
+        - "5002:5000"
+    container_name: Notificaciones
+    networks:
+        - pedidos-net
+    environment:
+      ConnectionStrings__DefaultConnection: Server=mysql;Database=db_notificaciones;Uid=admin;Pwd=root;
+    depends_on:
+      - mysql
+
+  ordenes:
+    image: ${DOCKER_REGISTRY-}ordenes
+    build:
+      context: .
+      dockerfile: src/Ordenes/Dockerfile
+    ports:
+        - "5003:5000"
+    container_name: Ordenes
+    networks:
+        - pedidos-net
+    environment:
+      ConnectionStrings__DefaultConnection: Server=mysql;Database=db_ordenes;Uid=admin;Pwd=root;
+    depends_on:
+      - mysql
+
+  usuarios:
+    image: ${DOCKER_REGISTRY-}usuarios
+    build:
+      context: .
+      dockerfile: src/Usuarios/Dockerfile
+    ports:
+       - "5004:5000"
+    container_name: Usuarios
+    networks:
+        - pedidos-net
+    environment:
+      ConnectionStrings__DefaultConnection: Server=mysql;Database=db_usuarios;Uid=admin;Pwd=root;
+    depends_on:
+      - mysql

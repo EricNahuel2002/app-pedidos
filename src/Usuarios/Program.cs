@@ -1,10 +1,41 @@
+using Microsoft.EntityFrameworkCore; // Necesario para UseMySql y Migrate
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure; // Necesario para la configuración de MySQL
+using Usuarios.Context; // Necesario para el DbContext
+
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+if (string.IsNullOrEmpty(connectionString))
+{
+    Console.WriteLine("ADVERTENCIA: Cadena de conexión 'DefaultConnection' no encontrada.");
+}
+
+builder.Services.AddDbContext<UsuariosDbContext>(options =>
+    options.UseMySql(
+        connectionString,
+        // AutoDetectará la versión de MySQL usando la cadena de conexión
+        ServerVersion.AutoDetect(connectionString),
+        mysqlOptions =>
+        {
+            // Configuración de tolerancia a fallos/reintentos (esencial en Docker)
+            mysqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 15,
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorNumbersToAdd: null);
+        }
+    )
+);
+
 // Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+// ====================================================================
+// 2. APLICACIÓN DE MIGRACIONES AL INICIO
+// ====================================================================
+ApplyMigrations(app);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -14,6 +45,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// ... (Endpoints de ejemplo originales, como /weatherforecast) ...
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -21,7 +53,7 @@ var summaries = new[]
 
 app.MapGet("/weatherforecast", () =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
+    var forecast = Enumerable.Range(1, 5).Select(index =>
         new WeatherForecast
         (
             DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
@@ -34,6 +66,32 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast");
 
 app.Run();
+
+// ====================================================================
+// MÉTODO AUXILIAR PARA APLICAR MIGRACIONES
+// ====================================================================
+static void ApplyMigrations(IApplicationBuilder app)
+{
+    using (var scope = app.ApplicationServices.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<UsuariosDbContext>();
+
+        try
+        {
+            Console.WriteLine("Usuarios: Aplicando migraciones...");
+            // Este método crea la base de datos si no existe y aplica todas las migraciones pendientes.
+            dbContext.Database.Migrate();
+            Console.WriteLine("Usuarios: Migraciones aplicadas con éxito.");
+        }
+        catch (Exception ex)
+        {
+            // Captura errores de conexión o migración. 
+            // Esto sucede a menudo si el contenedor MySQL aún no está listo.
+            Console.WriteLine($"Usuarios: ERROR al aplicar migraciones: {ex.Message}");
+            // La configuración de RetryOnFailure en el AddDbContext ayuda a mitigar este error.
+        }
+    }
+}
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {

@@ -11,10 +11,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("e25c46f2-99be-4712-bd02-22fadfc854b1")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("Menus")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ff13ad43b88c467edceb34938f3828c3ad8bfb88")]
 [assembly: System.Reflection.AssemblyProductAttribute("Menus")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Menus")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
