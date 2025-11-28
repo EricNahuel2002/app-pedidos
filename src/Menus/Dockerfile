@@ -1,28 +1,42 @@
-# Consulte https://aka.ms/customizecontainer para aprender a personalizar su contenedor de depuración y cómo Visual Studio usa este Dockerfile para compilar sus imágenes para una depuración más rápida.
+# Dockerfile.service - Dockerfile parametrizable para proyectos dentro de /src
+# Uso: docker build --build-arg SERVICE_NAME=Usuarios --build-arg PROJECT_PATH=src/Usuarios/Usuarios.csproj -t usuarios .
 
-# Esta fase se usa cuando se ejecuta desde VS en modo rápido (valor predeterminado para la configuración de depuración)
+# Base runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-USER $APP_UID
+ARG APP_UID=1000
+USER ${APP_UID}
 WORKDIR /app
 EXPOSE 5000
 
-
+# SDK image for building/publishing
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
-
+ARG SERVICE_NAME=Menus
+ARG PROJECT_PATH=src/Menus/Menus.csproj
 
 WORKDIR /app-root
-COPY AppPedidos.sln .
-COPY src/ .
-RUN dotnet restore "AppPedidos.sln"
-RUN dotnet build "src/Menus/Menus.csproj
 
+# Copiamos la solution y el código fuente
+COPY AppPedidos.sln .
+COPY docker-compose.dcproj .
+COPY src/ ./src/
+
+# Restauramos paquetes (por solución para caché)
+RUN dotnet restore "AppPedidos.sln"
+
+# Construimos el proyecto específico (para cacheo fino podés ajustar)
+RUN dotnet build "${PROJECT_PATH}" -c ${BUILD_CONFIGURATION} -o /app-build --no-restore
+
+# Publicar el proyecto seleccionado
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
+ARG PROJECT_PATH=src/Menus/Menus.csproj
 
-RUN dotnet publish "src/Menus/Menus.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "${PROJECT_PATH}" -c ${BUILD_CONFIGURATION} -o /app/publish /p:UseAppHost=false
 
+# Imagen final runtime
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
 ENTRYPOINT ["dotnet", "Menus.dll"]

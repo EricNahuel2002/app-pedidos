@@ -62,3 +62,15 @@ IGNORAR ARCHIVOS ESPECÍFICOS DE VS
 .vs/
 *.vsp
 *.vsw
+
+
+
+src/Usuarios/obj
+
+src/Ordenes/obj
+
+src/Menus/obj
+
+src/Notificaciones/obj
+
+src/ApiGateway/obj

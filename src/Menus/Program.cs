@@ -41,8 +41,6 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
-
 // ... (Endpoints de ejemplo originales, como /weatherforecast) ...
 var summaries = new[]
 {

@@ -7,6 +7,8 @@ services:
       MYSQL_PASSWORD: root
       MYSQL_DATABASE: masterdb
       MYSQL_ROOT_PASSWORD: root
+    ports:
+        - "3307:3306"
     volumes:
         - mysql-data:/var/lib/mysql
     networks:
@@ -20,6 +22,9 @@ services:
     ports:
         - "5000:5000"
     container_name: ApiGateway
+    environment:
+      ASPNETCORE_URLS: "http://+:5000"
+      ASPNETCORE_ENVIRONMENT: "Development"
     depends_on:
       - menus
       - notificaciones
@@ -40,7 +45,9 @@ services:
     networks:
         - pedidos-net
     environment:
-      ConnectionStrings__DefaultConnection: Server=mysql;Database=db_menus;Uid=admin;Pwd=root;
+      ConnectionStrings__DefaultConnection: "Server=mysql;Database=db_menus;Uid=admin;Pwd=root;"
+      ASPNETCORE_URLS: "http://+:5000"
+      ASPNETCORE_ENVIRONMENT: "Development"
     depends_on:
       - mysql
 
@@ -56,7 +63,9 @@ services:
     networks:
         - pedidos-net
     environment:
-      ConnectionStrings__DefaultConnection: Server=mysql;Database=db_notificaciones;Uid=admin;Pwd=root;
+      ConnectionStrings__DefaultConnection: "Server=mysql;Database=db_notificaciones;Uid=admin;Pwd=root;"
+      ASPNETCORE_URLS: "http://+:5000"
+      ASPNETCORE_ENVIRONMENT: "Development"
     depends_on:
       - mysql
 
@@ -71,7 +80,9 @@ services:
     networks:
         - pedidos-net
     environment:
-      ConnectionStrings__DefaultConnection: Server=mysql;Database=db_ordenes;Uid=admin;Pwd=root;
+      ConnectionStrings__DefaultConnection: "Server=mysql;Database=db_ordenes;Uid=admin;Pwd=root;"
+      ASPNETCORE_URLS: "http://+:5000"
+      ASPNETCORE_ENVIRONMENT: "Development"
     depends_on:
       - mysql
 
@@ -86,7 +97,9 @@ services:
     networks:
         - pedidos-net
     environment:
-      ConnectionStrings__DefaultConnection: Server=mysql;Database=db_usuarios;Uid=admin;Pwd=root;
+      ConnectionStrings__DefaultConnection: "Server=mysql;Database=db_usuarios;Uid=admin;Pwd=root;"
+      ASPNETCORE_URLS: "http://+:5000"
+      ASPNETCORE_ENVIRONMENT: "Development"
     depends_on:
       - mysql
 

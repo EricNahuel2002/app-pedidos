@@ -1,27 +1,41 @@
-# Consulte https://aka.ms/customizecontainer para aprender a personalizar su contenedor de depuración y cómo Visual Studio usa este Dockerfile para compilar sus imágenes para una depuración más rápida.
-
-# Esta fase se usa cuando se ejecuta desde VS en modo rápido (valor predeterminado para la configuración de depuración)
+# Dockerfile.service - Dockerfile parametrizable para proyectos dentro de /src
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-USER $APP_UID
+ARG APP_UID=1000
+USER ${APP_UID}
 WORKDIR /app
 EXPOSE 5000
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
-
+ARG SERVICE_NAME=Usuarios
+ARG PROJECT_PATH=src/Usuarios/Usuarios.csproj
 
 WORKDIR /app-root
+
+# Copiamos archivos de solución y metadatos necesarios (importante: incluir .dcproj si está referenciado)
 COPY AppPedidos.sln .
-COPY src/ .
+COPY docker-compose.dcproj .
+# Si tienes otros archivos de solución en la raíz (global.json, Directory.Build.props) agrégalos:
+# COPY global.json .
+# COPY Directory.Build.props .
+
+# Copiamos el código fuente
+COPY src/ ./src/
+
+# Restauramos paquetes (por solución para caché)
 RUN dotnet restore "AppPedidos.sln"
-RUN dotnet build "src/Usuarios/Usuarios.csproj"
+
+# Construimos el proyecto específico
+RUN dotnet build "${PROJECT_PATH}" -c ${BUILD_CONFIGURATION} -o /app-build --no-restore
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
+ARG PROJECT_PATH=src/Usuarios/Usuarios.csproj
 
-RUN dotnet publish "src/Usuarios/Usuarios.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "${PROJECT_PATH}" -c ${BUILD_CONFIGURATION} -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
 ENTRYPOINT ["dotnet", "Usuarios.dll"]
