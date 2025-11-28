@@ -6,25 +6,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+var serverVersion = new MySqlServerVersion(new Version(9, 5, 0));
+
 if (string.IsNullOrEmpty(connectionString))
 {
-    // Esto es útil para desarrollo local si DefaultConnection está vacío en appsettings.json
     Console.WriteLine("ADVERTENCIA: Cadena de conexión 'DefaultConnection' no encontrada.");
 }
 
 builder.Services.AddDbContext<MenuDbContext>(options =>
     options.UseMySql(
-        connectionString,
-        // AutoDetectará la versión de MySQL usando la cadena de conexión
-        ServerVersion.AutoDetect(connectionString),
-        mysqlOptions =>
-        {
-            // Configuración de tolerancia a fallos/reintentos (esencial en Docker)
-            mysqlOptions.EnableRetryOnFailure(
-                maxRetryCount: 15,
-                maxRetryDelay: TimeSpan.FromSeconds(30),
-                errorNumbersToAdd: null);
-        }
+        connectionString, serverVersion,
+        mysqlOptions => mysqlOptions.MigrationsAssembly(typeof(MenuDbContext).Assembly.FullName)
     )
 );
 

@@ -1,10 +1,13 @@
 using Microsoft.EntityFrameworkCore; // Necesario para UseMySql y Migrate
+using Microsoft.Extensions.Options;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure; // Necesario para la configuración de MySQL
 using Usuarios.Context; // Necesario para el DbContext
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+var serverVersion = new MySqlServerVersion(new Version(9, 5, 0));
 
 if (string.IsNullOrEmpty(connectionString))
 {
@@ -13,17 +16,8 @@ if (string.IsNullOrEmpty(connectionString))
 
 builder.Services.AddDbContext<UsuariosDbContext>(options =>
     options.UseMySql(
-        connectionString,
-        // AutoDetectará la versión de MySQL usando la cadena de conexión
-        ServerVersion.AutoDetect(connectionString),
-        mysqlOptions =>
-        {
-            // Configuración de tolerancia a fallos/reintentos (esencial en Docker)
-            mysqlOptions.EnableRetryOnFailure(
-                maxRetryCount: 15,
-                maxRetryDelay: TimeSpan.FromSeconds(30),
-                errorNumbersToAdd: null);
-        }
+        connectionString,serverVersion,
+        mysqlOptions => mysqlOptions.MigrationsAssembly(typeof(UsuariosDbContext).Assembly.FullName)
     )
 );
 

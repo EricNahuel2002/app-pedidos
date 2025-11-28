@@ -11,8 +11,14 @@ services:
         - "3307:3306"
     volumes:
         - mysql-data:/var/lib/mysql
+        - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
         - pedidos-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uadmin", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   apigateway:
     image: ${DOCKER_REGISTRY-}apigateway
@@ -45,11 +51,12 @@ services:
     networks:
         - pedidos-net
     environment:
-      ConnectionStrings__DefaultConnection: "Server=mysql;Database=db_menus;Uid=admin;Pwd=root;"
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=db_menus;User=admin;Password=root;SslMode=None;"
       ASPNETCORE_URLS: "http://+:5000"
       ASPNETCORE_ENVIRONMENT: "Development"
     depends_on:
-      - mysql
+        mysql:
+            condition: service_healthy
 
 
   notificaciones:
@@ -63,11 +70,12 @@ services:
     networks:
         - pedidos-net
     environment:
-      ConnectionStrings__DefaultConnection: "Server=mysql;Database=db_notificaciones;Uid=admin;Pwd=root;"
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=db_notificaciones;User=admin;Password=root;SslMode=None;"
       ASPNETCORE_URLS: "http://+:5000"
       ASPNETCORE_ENVIRONMENT: "Development"
     depends_on:
-      - mysql
+        mysql:
+            condition: service_healthy
 
   ordenes:
     image: ${DOCKER_REGISTRY-}ordenes
@@ -80,11 +88,12 @@ services:
     networks:
         - pedidos-net
     environment:
-      ConnectionStrings__DefaultConnection: "Server=mysql;Database=db_ordenes;Uid=admin;Pwd=root;"
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=db_ordenes;User=admin;Password=root;SslMode=None;"
       ASPNETCORE_URLS: "http://+:5000"
       ASPNETCORE_ENVIRONMENT: "Development"
     depends_on:
-      - mysql
+        mysql:
+            condition: service_healthy
 
   usuarios:
     image: ${DOCKER_REGISTRY-}usuarios
@@ -97,11 +106,12 @@ services:
     networks:
         - pedidos-net
     environment:
-      ConnectionStrings__DefaultConnection: "Server=mysql;Database=db_usuarios;Uid=admin;Pwd=root;"
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=db_usuarios;User=admin;Password=root;SslMode=None;"
       ASPNETCORE_URLS: "http://+:5000"
       ASPNETCORE_ENVIRONMENT: "Development"
     depends_on:
-      - mysql
+        mysql:
+            condition: service_healthy
 
 networks:
     pedidos-net:
