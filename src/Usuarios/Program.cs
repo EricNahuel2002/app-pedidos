@@ -1,7 +1,8 @@
-using Microsoft.EntityFrameworkCore; // Necesario para UseMySql y Migrate
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure; // Necesario para la configuración de MySQL
-using Usuarios.Context; // Necesario para el DbContext
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Usuarios.Context;
+using Usuarios.servicios;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,14 +22,18 @@ builder.Services.AddDbContext<UsuariosDbContext>(options =>
     )
 );
 
+builder.Services.AddScoped<IUsuarioServicio, UsuarioServicio>();
+
+builder.Services.AddHttpClient<IUsuarioServicio,UsuarioServicio>(client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5000/");
+});
+
 // Add services to the container.
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// ====================================================================
-// 2. APLICACIÓN DE MIGRACIONES AL INICIO
-// ====================================================================
 ApplyMigrations(app);
 
 // Configure the HTTP request pipeline.
@@ -37,31 +42,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-// ... (Endpoints de ejemplo originales, como /weatherforecast) ...
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
 
 app.Run();
 
-// ====================================================================
-// MÉTODO AUXILIAR PARA APLICAR MIGRACIONES
-// ====================================================================
 static void ApplyMigrations(IApplicationBuilder app)
 {
     using (var scope = app.ApplicationServices.CreateScope())
@@ -71,7 +54,6 @@ static void ApplyMigrations(IApplicationBuilder app)
         try
         {
             Console.WriteLine("Usuarios: Aplicando migraciones...");
-            // Este método crea la base de datos si no existe y aplica todas las migraciones pendientes.
             dbContext.Database.Migrate();
             Console.WriteLine("Usuarios: Migraciones aplicadas con éxito.");
         }
@@ -83,9 +65,4 @@ static void ApplyMigrations(IApplicationBuilder app)
             // La configuración de RetryOnFailure en el AddDbContext ayuda a mitigar este error.
         }
     }
-}
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
