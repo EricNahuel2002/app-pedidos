@@ -2,9 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Usuarios.Context;
+using Usuarios.repositorio;
 using Usuarios.servicios;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -18,12 +20,16 @@ if (string.IsNullOrEmpty(connectionString))
 builder.Services.AddDbContext<UsuariosDbContext>(options =>
     options.UseMySql(
         connectionString,serverVersion,
-        mysqlOptions => mysqlOptions.MigrationsAssembly(typeof(UsuariosDbContext).Assembly.FullName)
+        mysqlOptions => mysqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null)
     )
 );
 
 builder.Services.AddScoped<IUsuarioServicio, UsuarioServicio>();
-
+builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+builder.Services.AddControllers();
 builder.Services.AddHttpClient<IUsuarioServicio,UsuarioServicio>(client =>
 {
     client.BaseAddress = new Uri("http://localhost:5000/");
@@ -34,6 +40,7 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+app.MapControllers();
 ApplyMigrations(app);
 
 // Configure the HTTP request pipeline.

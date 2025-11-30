@@ -23,11 +23,11 @@ public class UsuariosDbContext: DbContext
         // 2. Configurar CreatedAt y UpdatedAt para MySQL (valores por defecto)
         modelBuilder.Entity<Usuario>()
             .Property(u => u.CreatedAt)
-            .HasDefaultValueSql("NOW()");
+            .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
 
         modelBuilder.Entity<Usuario>()
             .Property(u => u.UpdatedAt)
-            .HasDefaultValueSql("NOW()");
+            .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
 
         base.OnModelCreating(modelBuilder);
     }

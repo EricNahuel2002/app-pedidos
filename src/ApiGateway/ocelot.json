@@ -3,7 +3,7 @@
     {
       "UpstreamHttpMethod": [ "Get" ],
       "UpstreamPathTemplate": "/usuarios/{id}",
-      "DownstreamPathTemplate": "api/usuarios/{id}",
+      "DownstreamPathTemplate": "/api/usuarios/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -14,8 +14,8 @@
     },
     {
       "UpstreamHttpMethod": [ "Post" ],
-      "UpstreamPathTemplate": "/usuarios/create",
-      "DownstreamPathTemplate": "api/usuarios/crear",
+      "UpstreamPathTemplate": "/usuarios/crear",
+      "DownstreamPathTemplate": "/api/usuarios/crear",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -27,7 +27,7 @@
     {
       "UpstreamHttpMethod": [ "Get" ],
       "UpstreamPathTemplate": "/ordenes/{id}",
-      "DownstreamPathTemplate": "api/ordenes/{id}",
+      "DownstreamPathTemplate": "/api/ordenes/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -39,7 +39,7 @@
     {
       "UpstreamHttpMethod": [ "Get" ],
       "UpstreamPathTemplate": "/menus/{id}",
-      "DownstreamPathTemplate": "api/menus/{id}",
+      "DownstreamPathTemplate": "/api/menus/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
