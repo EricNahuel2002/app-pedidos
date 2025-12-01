@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Usuarios.Context;
 
@@ -11,9 +12,11 @@ using Usuarios.Context;
 namespace Usuarios.Migrations
 {
     [DbContext(typeof(UsuariosDbContext))]
-    partial class UsuariosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251130220758_UsuarioPorClienteAgregadoAdminYRepartidor")]
+    partial class UsuarioPorClienteAgregadoAdminYRepartidor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,27 +24,6 @@ namespace Usuarios.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
-
-            modelBuilder.Entity("Usuarios.Entidad.Administrador", b =>
-                {
-                    b.Property<int>("IdAdmin")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IdAdmin"));
-
-                    b.Property<string>("Contrasenia")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("IdAdmin");
-
-                    b.ToTable("Administradores");
-                });
 
             modelBuilder.Entity("Usuarios.Entidad.Cliente", b =>
                 {
@@ -76,27 +58,6 @@ namespace Usuarios.Migrations
                         .IsUnique();
 
                     b.ToTable("Usuarios");
-                });
-
-            modelBuilder.Entity("Usuarios.Entidad.Repartidor", b =>
-                {
-                    b.Property<int>("IdRepartidor")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IdRepartidor"));
-
-                    b.Property<string>("Contrasenia")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("IdRepartidor");
-
-                    b.ToTable("Repartidores");
                 });
 #pragma warning restore 612, 618
         }

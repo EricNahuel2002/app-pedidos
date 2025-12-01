@@ -7,7 +7,7 @@ namespace Usuarios.repositorio;
 
 public interface IUsuarioRepositorio
 {
-    Task<bool> crearUsuario(Usuario usuario);
+    Task<bool> crearUsuario(Cliente usuario);
 }
 public class UsuarioRepositorio : IUsuarioRepositorio
 {
@@ -16,7 +16,7 @@ public class UsuarioRepositorio : IUsuarioRepositorio
     {
         _context = context;
     }
-    public async Task<bool> crearUsuario(Usuario usuario)
+    public async Task<bool> crearUsuario(Cliente usuario)
     {
         try
         {

@@ -1,0 +1,76 @@
+{
+  "Routes": [
+    {
+      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamPathTemplate": "/usuarios/crear-cliente",
+      "DownstreamPathTemplate": "/api/usuarios/crear-cliente",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "usuarios",
+          "Port": 5000
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/usuarios/cliente/{id}",
+      "DownstreamPathTemplate": "/api/usuarios/cliente/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "usuarios",
+          "Port": 5000
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamPathTemplate": "/usuarios/crear-admin",
+      "DownstreamPathTemplate": "/api/usuarios/crear-admin",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "usuarios",
+          "Port": 5000
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/usuarios/admin/{id}",
+      "DownstreamPathTemplate": "/api/usuarios/admin/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "usuarios",
+          "Port": 5000
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamPathTemplate": "/usuarios/crear-repartidor",
+      "DownstreamPathTemplate": "/api/usuarios/crear-repartidor",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "usuarios",
+          "Port": 5000
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/usuarios/repartidor/{id}",
+      "DownstreamPathTemplate": "/api/usuarios/repartidor/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "usuarios",
+          "Port": 5000
+        }
+      ]
+    }
+  ]
+}

@@ -21,13 +21,12 @@ public class UsuarioServicio : IUsuarioServicio
     }
     public async Task<bool> crearUsuario(string nombre, string email, string? telefono)
     {
-        Usuario usuario = new Usuario
+        Cliente usuario = new Cliente
         {
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow,
-            Name = nombre,
+            FechaCreacion = DateTime.UtcNow,
+            Nombre = nombre,
             Email = email,
-            Phone = telefono
+            Telefono = telefono
         };
         return await _usuarioRepo.crearUsuario(usuario);
     }

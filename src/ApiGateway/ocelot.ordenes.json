@@ -1,0 +1,28 @@
+{
+  "Routes": [
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/ordenes/cliente/{id}",
+      "DownstreamPathTemplate": "/api/ordenes/cliente/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "ordenes",
+          "Port": 5000
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/ordenes/",
+      "DownstreamPathTemplate": "/api/ordenes/",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "ordenes",
+          "Port": 5000
+        }
+      ]
+    }
+  ]
+}

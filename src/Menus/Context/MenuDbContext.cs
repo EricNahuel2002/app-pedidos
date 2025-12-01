@@ -11,16 +11,10 @@ namespace Menus.Context
             }
             public DbSet<Menu> Menus { get; set; }
 
-            protected override void OnModelCreating(ModelBuilder modelBuilder)
-            {
-                modelBuilder.Entity<Menu>()
-                    .Property(m => m.CreatedAt)
-                    .HasDefaultValueSql("NOW()");
-                modelBuilder.Entity<Menu>()
-                    .Property(m => m.UpdatedAt)
-                    .HasDefaultValueSql("NOW()");
-                base.OnModelCreating(modelBuilder);
-            }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+        
+        }
     }
     
 }

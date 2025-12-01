@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Usuarios.Context;
 
@@ -11,9 +12,11 @@ using Usuarios.Context;
 namespace Usuarios.Migrations
 {
     [DbContext(typeof(UsuariosDbContext))]
-    partial class UsuariosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251130221510_AgregarAdministradorYRepartidorYModificarUsuarioPorCliente")]
+    partial class AgregarAdministradorYRepartidorYModificarUsuarioPorCliente
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
