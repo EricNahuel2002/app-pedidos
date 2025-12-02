@@ -7,7 +7,7 @@ export const routes: Routes = [
         component : Inicio
     },
     {
-        path : 'detalle-menu/{id}',
+        path : 'detalle-menu/:id',
         loadComponent : () => import("./componentes/detalle-menu/detalle-menu")
         .then(c => c.DetalleMenu)
     },

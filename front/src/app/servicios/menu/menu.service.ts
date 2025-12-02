@@ -7,10 +7,14 @@ import { environment } from '@environment/environment.development';
 @Injectable({
   providedIn: 'root',
 })
-export class InicioService {
+export class MenuService {
     private httpclient = inject(HttpClient);
 
     listarMenus(): Observable<Menu[]>{
         return this.httpclient.get<Menu[]>(`${environment.BACKEND_URL}/menus`);
+    }
+
+    listarMenu(id:number): Observable<Menu>{
+      return this.httpclient.get<Menu>(`${environment.BACKEND_URL}/menus/${id}`)
     }
 }
