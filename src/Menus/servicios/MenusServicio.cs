@@ -10,6 +10,7 @@ public interface IMenusServicio
 {
     Task<bool> CrearMenu(MenuModelView menu);
     Task<MenuModelView> ObtenerMenu(int idMenu);
+    Task<List<MenuModelView>> ObtenerMenus();
 }
 
 public class MenusServicio : IMenusServicio
@@ -38,5 +39,22 @@ public class MenusServicio : IMenusServicio
     {
         Menu m = await _MenuRepo.ObtenerMenu(idMenu);
         return new MenuModelView(m.Id, m.Nombre, m.Descripcion, m.Precio, m.Imagen);
+    }
+
+    public async Task<List<MenuModelView>> ObtenerMenus()
+    {
+        List<Menu> menus = await _MenuRepo.ObtenerMenus();
+        List<MenuModelView> menusModelViews = new List<MenuModelView>();
+        this.Metodo(menus,menusModelViews);
+        return menusModelViews;
+    }
+
+    private void Metodo(List<Menu> menus,List<MenuModelView> menusModelView)
+    {
+        foreach (Menu m in menus) 
+        { 
+            MenuModelView menuModelView = new MenuModelView (m.Id,m.Nombre,m.Descripcion,m.Precio, m.Imagen);
+            menusModelView.Add(menuModelView);
+        }
     }
 }

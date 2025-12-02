@@ -9,6 +9,7 @@ public interface IMenusRepositorio
 {
     Task<int> CrearMenu(Menu m);
     Task<Menu> ObtenerMenu(int idMenu);
+    Task<List<Menu>> ObtenerMenus();
 }
 public class MenusRepositorio : IMenusRepositorio
 {
@@ -29,5 +30,10 @@ public class MenusRepositorio : IMenusRepositorio
     public async Task<Menu> ObtenerMenu(int idMenu)
     {
         return await this._context.Menus.Where(m => m.Id == idMenu).FirstOrDefaultAsync();
+    }
+
+    public async Task<List<Menu>> ObtenerMenus()
+    {
+        return await this._context.Menus.ToListAsync();
     }
 }

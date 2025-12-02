@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // carga base (opcional)
 builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
@@ -21,13 +22,13 @@ foreach (var f in files)
     if (routes != null)
         foreach (var r in routes)
             allRoutes.Add(r);
-    // si hay GlobalConfiguration y no existe en merged añádelo
+    // si hay GlobalConfiguration y no existe en merged aï¿½ï¿½delo
     if (merged["GlobalConfiguration"] == null && j["GlobalConfiguration"] != null)
         merged["GlobalConfiguration"] = j["GlobalConfiguration"];
 }
 merged["Routes"] = allRoutes;
 
-// Añadimos la configuración mergeada a memoria para que Ocelot la use
+// Aï¿½adimos la configuraciï¿½n mergeada a memoria para que Ocelot la use
 var memStream = new MemoryStream();
 var sw = new StreamWriter(memStream);
 sw.Write(merged.ToString());
@@ -35,18 +36,32 @@ sw.Flush();
 memStream.Position = 0;
 builder.Configuration.AddJsonStream(memStream);
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddOcelot(builder.Configuration);
 
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
-
 app.UseRouting();
+app.UseCors("AllowAngular");
+
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
 
 await app.UseOcelot();
 await app.RunAsync();

@@ -34,6 +34,15 @@ ARG PROJECT_PATH=src/Notificaciones/Notificaciones.csproj
 
 RUN dotnet publish "${PROJECT_PATH}" -c ${BUILD_CONFIGURATION} -o /app/publish /p:UseAppHost=false
 
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS dev
+WORKDIR /app
+
+COPY AppPedidos.sln .
+COPY src/ ./src/ 
+COPY docker-compose.dcproj .
+
+RUN dotnet restore "AppPedidos.sln"
+
 # Imagen final runtime
 FROM base AS final
 WORKDIR /app

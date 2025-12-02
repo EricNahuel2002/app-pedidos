@@ -15,7 +15,7 @@ namespace Menus.controladores
             this._menuServicio = menuServicio;
         }
 
-        [HttpGet("get/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> ListarMenu(int id) {
 
             try
@@ -27,7 +27,7 @@ namespace Menus.controladores
             }
             catch (Exception ex) 
             { 
-                return BadRequest("SE GENERO UN ERROR INESPERADO: " + ex.Message);
+                return BadRequest("SE GENERO UN ERROR INESPERADO EN EL METODO LISTAR MENU: " + ex.Message);
             }
         }
 
@@ -44,5 +44,20 @@ namespace Menus.controladores
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ListarMenus()
+        {
+            try
+            {
+                List<MenuModelView> menu = await this._menuServicio.ObtenerMenus();
+                if (menu.Count == 0) 
+                    return NotFound("NO HAY MENUS");
+                return Ok(menu);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("SE GENERO UN ERROR INESPERADO EN EL METODO LISTAR MENUS: " + ex.Message);
+            }
+        }
     }
 }

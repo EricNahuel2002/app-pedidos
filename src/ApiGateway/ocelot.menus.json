@@ -2,8 +2,8 @@
   "Routes": [
     {
       "UpstreamHttpMethod": [ "Get" ],
-      "UpstreamPathTemplate": "/menus/get/{id}",
-      "DownstreamPathTemplate": "/api/menus/get/{id}",
+      "UpstreamPathTemplate": "/menus/{id}",
+      "DownstreamPathTemplate": "/api/menus/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
