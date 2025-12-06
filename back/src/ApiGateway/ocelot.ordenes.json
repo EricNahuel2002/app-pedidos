@@ -14,8 +14,8 @@
     },
     {
       "UpstreamHttpMethod": [ "Get" ],
-      "UpstreamPathTemplate": "/ordenes/",
-      "DownstreamPathTemplate": "/api/ordenes/",
+      "UpstreamPathTemplate": "/ordenes",
+      "DownstreamPathTemplate": "/api/ordenes",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -28,6 +28,18 @@
       "UpstreamHttpMethod": [ "Post" ],
       "UpstreamPathTemplate": "/ordenes/confirmarOrden",
       "DownstreamPathTemplate": "/api/ordenes/confirmarOrden",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "ordenes",
+          "Port": 5000
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Patch" ],
+      "UpstreamPathTemplate": "/ordenes/cancelar/cliente/{idCliente}/orden/{idOrden}",
+      "DownstreamPathTemplate": "/api/ordenes/cancelar/cliente/{idCliente}/orden/{idOrden}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

@@ -1,5 +1,7 @@
 ﻿using Ordenes.Dto;
 using Ordenes.Entidad;
+using Ordenes.Enum;
+using Ordenes.Excepciones;
 using Ordenes.repositorios;
 using System.Net.Http.Json;
 
@@ -8,6 +10,7 @@ namespace Ordenes.servicios;
 
 public interface IOrdenesServicio
 {
+    Task<bool> CancelarOrden(int idCliente,int idOrden);
     Task<bool> ConfirmarOrden(MenuCliente menuCliente);
     Task<List<Orden>> ObtenerOrdenesDeCliente(int id);
 }
@@ -20,6 +23,21 @@ public class OrdenesServicio : IOrdenesServicio
         this._ordenesRepositorio = ordenesRepositorio;
         this._http = httpFactory.CreateClient("ApiGateway");
     }
+
+    public async Task<bool> CancelarOrden(int idCliente, int idOrden)
+    {
+        Orden? orden = await this._ordenesRepositorio.ObtenerOrdenDelCliente(idCliente, idOrden);
+
+        if (orden == null) return false;
+
+        if (!orden.Estado.Equals("pendiente"))
+        {
+            throw new OrdenEnCursoException("No se puede cancelar una orden en curso o ya cancelada");
+        }
+        orden.Estado = "cancelada";
+        return await this._ordenesRepositorio.CancelarOrden(orden);
+    }
+
     public async Task<bool> ConfirmarOrden(MenuCliente menuCliente)
     {
         ClienteDto? cliente = await this._http.GetFromJsonAsync<ClienteDto>($"/usuarios/cliente/{menuCliente.IdUsuario}");

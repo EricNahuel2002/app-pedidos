@@ -20,4 +20,14 @@ export class OrdenService {
     
     return this.http.get<Orden[]>(`${environment.BACKEND_URL}/ordenes/cliente/${idCliente}`); 
   }
+
+  cancelarOrden(idCliente:number,idOrden:number){
+    return this.http.patch(
+        `${environment.BACKEND_URL}/ordenes/cancelar/cliente/${idCliente}/orden/${idOrden}`, 
+        null,
+        { 
+            responseType: 'text'
+        }
+    );
+  }
 }

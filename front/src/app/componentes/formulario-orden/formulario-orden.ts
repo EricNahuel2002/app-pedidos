@@ -7,10 +7,12 @@ import { MenuService } from '@servicios/menu/menu.service';
 import { OrdenService } from '@servicios/orden/orden.service';
 import { UsuarioService } from '@servicios/usuario/usuario.service';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { MessageService } from 'primeng/api';
+import { SplitButtonModule } from 'primeng/splitbutton';
 
 @Component({
   selector: 'app-formulario-orden',
-  imports: [ReactiveFormsModule,ProgressSpinnerModule],
+  imports: [ReactiveFormsModule,ProgressSpinnerModule,SplitButtonModule],
   templateUrl: './formulario-orden.html',
   styleUrl: './formulario-orden.css',
 })
@@ -22,6 +24,7 @@ export class FormularioOrden implements OnInit {
   ordenService = inject(OrdenService);
   formBuilder = inject(FormBuilder);
   router = inject(Router);
+  messageService = inject(MessageService);
 
   idMenu!:number;
   idUsuario!:number;
@@ -70,6 +73,11 @@ export class FormularioOrden implements OnInit {
       }else{
         this.ordenService.ConfirmarOrden(idMenu,this.idUsuario).subscribe({
         next: (data) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Orden realizada',
+          detail: 'Tu orden esta pendiente de ser tomada por un repartidor'
+        })
           this.router.navigate(['/'])
         },
         error : (err) => console.log(err)

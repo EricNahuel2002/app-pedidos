@@ -54,6 +54,10 @@ export class UsuarioService {
       return this.http.post<number>(`${environment.BACKEND_URL}/usuarios/iniciar-sesion`,{email,contrasenia});
    }
 
+    registrarUsuario(nombre:string,email:string,contrasenia:string,direccion:string,telefono:string){
+      return this.http.post(`${environment.BACKEND_URL}/usuarios/crear-cliente`,{nombre,email,contrasenia,direccion,telefono});
+  }
+
    obtenerUsuarioDeSesion(): number | null {
     if (typeof window === 'undefined') {
       return null;

@@ -54,6 +54,7 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 app.UseRouting();
+
 app.UseCors("AllowAngular");
 
 

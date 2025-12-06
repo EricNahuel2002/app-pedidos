@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Ordenes.Dto;
 using Ordenes.Entidad;
+using Ordenes.Excepciones;
 using Ordenes.servicios;
 using System.Threading.Tasks;
 
@@ -40,6 +41,26 @@ public class OrdenesController : Controller
         }
         catch(Exception ex){
             return StatusCode(500, $"Error al traer ordenes del usuario: {ex.Message}");
+        }
+    }
+
+    [HttpPatch("cancelar/cliente/{idCliente}/orden/{idOrden}")]
+    public async Task<IActionResult> CancelarOrden(int idCliente,int idOrden)
+    {
+        try
+        {
+            var resultado = await this._ordenesServicio.CancelarOrden(idCliente,idOrden);
+            if (resultado) {
+                return Ok("Orden cancelada exitosamente");
+
+            }
+            else
+            {
+                return NotFound("Orden no encontrada");
+            }
+        }
+        catch(OrdenEnCursoException ex){
+            return StatusCode(409, $"{ex.Message}");
         }
     }
 }

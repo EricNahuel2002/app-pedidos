@@ -9,18 +9,18 @@ export const routes: Routes = [
     },
     {
         path : 'detalle-menu/:id',
-        loadComponent : () => import("./componentes/detalle-menu/detalle-menu")
+        loadComponent : () => import("@componentes/detalle-menu/detalle-menu")
         .then(c => c.DetalleMenu)
     },
     {
         path : 'formulario-orden/:id',
-        loadComponent : () => import("./componentes/formulario-orden/formulario-orden")
+        loadComponent : () => import("@componentes/formulario-orden/formulario-orden")
         .then(c => c.FormularioOrden),
         canActivate : [authGuard]
     },
     {
         path : 'ordenes',
-        loadComponent : () => import("./componentes/ordenes/ordenes")
+        loadComponent : () => import("@componentes/ordenes/ordenes")
         .then(c => c.Ordenes),
         canActivate : [authGuard]
     },
@@ -30,8 +30,13 @@ export const routes: Routes = [
         .then(c => c.IniciarSesion)
     },
     {
+        path : 'registro-usuario',
+        loadComponent : () => import("@componentes/registrar-usuario/registrar-usuario")
+        .then(c => c.RegistrarUsuario)
+    },
+    {
         path : 'repartidor',
-        loadComponent : () => import("./componentes/repartidor/repartidor")
+        loadComponent : () => import("@componentes/repartidor/repartidor")
         .then(c => c.Repartidor),
         canActivate : [authGuard]
     }
