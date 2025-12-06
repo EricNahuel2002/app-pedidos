@@ -23,6 +23,18 @@
           "Port": 5000
         }
       ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamPathTemplate": "/ordenes/confirmarOrden",
+      "DownstreamPathTemplate": "/api/ordenes/confirmarOrden",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "ordenes",
+          "Port": 5000
+        }
+      ]
     }
   ]
 }

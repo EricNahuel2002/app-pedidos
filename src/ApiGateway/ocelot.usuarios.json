@@ -25,21 +25,9 @@
       ]
     },
     {
-      "UpstreamHttpMethod": [ "Post" ],
-      "UpstreamPathTemplate": "/usuarios/crear-admin",
-      "DownstreamPathTemplate": "/api/usuarios/crear-admin",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "usuarios",
-          "Port": 5000
-        }
-      ]
-    },
-    {
       "UpstreamHttpMethod": [ "Get" ],
-      "UpstreamPathTemplate": "/usuarios/admin/{id}",
-      "DownstreamPathTemplate": "/api/usuarios/admin/{id}",
+      "UpstreamPathTemplate": "/usuarios/validarSesion/{id}",
+      "DownstreamPathTemplate": "/api/usuarios/validarSesion/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -50,20 +38,8 @@
     },
     {
       "UpstreamHttpMethod": [ "Post" ],
-      "UpstreamPathTemplate": "/usuarios/crear-repartidor",
-      "DownstreamPathTemplate": "/api/usuarios/crear-repartidor",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "usuarios",
-          "Port": 5000
-        }
-      ]
-    },
-    {
-      "UpstreamHttpMethod": [ "Get" ],
-      "UpstreamPathTemplate": "/usuarios/repartidor/{id}",
-      "DownstreamPathTemplate": "/api/usuarios/repartidor/{id}",
+      "UpstreamPathTemplate": "/usuarios/iniciar-sesion",
+      "DownstreamPathTemplate": "/api/usuarios/iniciar-sesion",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

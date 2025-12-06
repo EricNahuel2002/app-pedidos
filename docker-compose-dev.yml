@@ -35,6 +35,8 @@ services:
     volumes:
         - ./src/ApiGateway:/app
         - nuget-cache:/root/.nuget/packages
+        - /app/bin
+        - /app/obj
     command:
         bash -c "dotnet watch run --project /app/ApiGateway.csproj --no-launch-profile"
     depends_on:
@@ -64,6 +66,8 @@ services:
     volumes:
         - ./src/Menus:/app
         - nuget-cache:/root/.nuget/packages
+        - /app/bin
+        - /app/obj
     command:
         bash -c "dotnet watch run --project /app/Menus.csproj --no-launch-profile"
     depends_on:
@@ -89,6 +93,8 @@ services:
     volumes:
         - ./src/Notificaciones:/app
         - nuget-cache:/root/.nuget/packages
+        - /app/bin
+        - /app/obj
     command:
         bash -c "dotnet watch run --project /app/Notificaciones.csproj --no-launch-profile"
     depends_on:
@@ -113,6 +119,8 @@ services:
     volumes:
         - ./src/Ordenes:/app
         - nuget-cache:/root/.nuget/packages
+        - /app/bin
+        - /app/obj
     command:
         bash -c "dotnet watch run --project /app/Ordenes.csproj --no-launch-profile"
     depends_on:
@@ -137,6 +145,8 @@ services:
     volumes:
         - ./src/Usuarios:/app
         - nuget-cache:/root/.nuget/packages
+        - /app/bin
+        - /app/obj
     command:
         bash -c "dotnet watch run --project /app/Usuarios.csproj --no-launch-profile"
     depends_on:

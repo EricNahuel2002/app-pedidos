@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Usuarios.Context;
+using Ordenes.Context;
 
 #nullable disable
 
-namespace Usuarios.Migrations
+namespace Ordenes.Migrations
 {
-    [DbContext(typeof(UsuariosDbContext))]
-    [Migration("20251130220758_UsuarioPorClienteAgregadoAdminYRepartidor")]
-    partial class UsuarioPorClienteAgregadoAdminYRepartidor
+    [DbContext(typeof(OrdenesDbContext))]
+    [Migration("20251205220352_PrimeraMigracion")]
+    partial class PrimeraMigracion
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,39 +25,51 @@ namespace Usuarios.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("Usuarios.Entidad.Cliente", b =>
+            modelBuilder.Entity("Ordenes.Entidad.Orden", b =>
                 {
-                    b.Property<int>("IdCliente")
+                    b.Property<int>("IdOrden")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IdCliente"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IdOrden"));
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Direccion")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<string>("EmailCliente")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<DateTime>("FechaCreacion")
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("FechaOrden")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
 
-                    b.Property<string>("Nombre")
+                    b.Property<int>("IdMenu")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdUsuario")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NombreCliente")
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("varchar(150)");
 
-                    b.Property<string>("Telefono")
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                    b.Property<int>("PrecioAPagar")
+                        .HasColumnType("int");
 
-                    b.HasKey("IdCliente");
+                    b.HasKey("IdOrden");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.ToTable("Usuarios");
+                    b.ToTable("Ordenes");
                 });
 #pragma warning restore 612, 618
         }

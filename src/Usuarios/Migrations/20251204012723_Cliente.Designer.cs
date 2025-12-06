@@ -12,8 +12,8 @@ using Usuarios.Context;
 namespace Usuarios.Migrations
 {
     [DbContext(typeof(UsuariosDbContext))]
-    [Migration("20251130222316_AdminRepartidorCliente")]
-    partial class AdminRepartidorCliente
+    [Migration("20251204012723_Cliente")]
+    partial class Cliente
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,6 +54,16 @@ namespace Usuarios.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IdCliente"));
 
+                    b.Property<string>("Contrasenia")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Direccion")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -78,7 +88,7 @@ namespace Usuarios.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Clientes");
                 });
 
             modelBuilder.Entity("Usuarios.Entidad.Repartidor", b =>

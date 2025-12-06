@@ -5,42 +5,30 @@ namespace Ordenes.Entidad
 {
     public class Orden
     {
-        // PK
         [Key]
-        public int OrderId { get; set; }
-
-        // REFERENCIA remota: solo guardo el id, NO FK física
-        [Required]
-        public int UserId { get; set; }
-
-        // Snapshot del usuario
-        [Required]
-        [MaxLength(150)] // Tamaño adecuado para un nombre
-        public string UserName { get; set; } = null!;
+        public int IdOrden { get; set; }
 
         [Required]
-        [MaxLength(255)] // Tamaño adecuado para un email
-        public string UserEmail { get; set; } = null!;
-
-        // Totales y metadatos
+        public int IdUsuario { get; set; }
         [Required]
-        public int TotalCents { get; set; }
+        public int IdMenu { get; set; }
+        [Required]
+        [MaxLength(150)] 
+        public string NombreCliente { get; set; } = null!;
 
         [Required]
-        [MaxLength(50)] // Para estados como "pendiente", "en proceso", "entregado"
-        public string Status { get; set; } = "pendiente";
+        [MaxLength(255)]
+        public string EmailCliente { get; set; } = null!;
 
-        // El signo '?' en Address y Notes ya indica que son opcionales/nullable.
+        [Required]
+        public int PrecioAPagar { get; set; }
+
+        [Required]
+        [MaxLength(50)]
+        public string Estado { get; set; } = "pendiente";
+
         [MaxLength(500)]
-        public string? Address { get; set; }
-
-        [MaxLength(1000)]
-        public string? Notes { get; set; }
-
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-
-        // Relación local: Order -> OrderItems (EF Core la detectará automáticamente)
-        public ICollection<OrderItem>? Items { get; set; }
+        public string Direccion { get; set; }
+        public DateTime FechaOrden { get; set; } = DateTime.UtcNow;
     }
 }

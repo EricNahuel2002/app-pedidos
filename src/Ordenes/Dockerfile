@@ -16,18 +16,15 @@ ARG PROJECT_PATH=src/Ordenes/Ordenes.csproj
 
 WORKDIR /app-root
 
-# Copiamos la solution y el código fuente
 COPY AppPedidos.sln .
 COPY docker-compose.dcproj .
 COPY src/ ./src/
 
-# Restauramos paquetes (por solución para caché)
 RUN dotnet restore "AppPedidos.sln"
 
-# Construimos el proyecto específico (para cacheo fino podés ajustar)
 RUN dotnet build "${PROJECT_PATH}" -c ${BUILD_CONFIGURATION} -o /app-build --no-restore
 
-# Publicar el proyecto seleccionado
+
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 ARG PROJECT_PATH=src/Ordenes/Ordenes.csproj
@@ -43,7 +40,6 @@ COPY docker-compose.dcproj .
 
 RUN dotnet restore "AppPedidos.sln"
 
-# Imagen final runtime
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .

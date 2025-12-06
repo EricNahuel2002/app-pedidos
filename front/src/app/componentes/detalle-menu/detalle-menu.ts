@@ -3,8 +3,9 @@ import { Menu } from '@interfaces/menu.interface';
 import { CurrencyPipe } from '@angular/common';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MenuService } from '@servicios/menu/menu.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { OrdenService } from '@servicios/orden/orden.service';
 
 @Component({
   selector: 'app-detalle-menu',
@@ -21,6 +22,8 @@ export class DetalleMenu implements OnInit, OnDestroy{
 
   menuService = inject(MenuService);
   route = inject(ActivatedRoute);
+  ordenService = inject(OrdenService);
+  router = inject(Router);
 
   ngOnInit(): void {
     this.idMenu = Number(this.route.snapshot.paramMap.get('id'));
@@ -38,6 +41,11 @@ export class DetalleMenu implements OnInit, OnDestroy{
       error : (data) => console.log("ERROR AL TRAER UN MENU",data)
     })
   }
+
+  hacerOrden(idMenu:number){
+    this.router.navigate(['/formulario-orden',idMenu]);
+  }
+  
 
 
 

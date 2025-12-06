@@ -1,6 +1,8 @@
-using Microsoft.EntityFrameworkCore; // Necesario para UseMySql y Migrate
-using Ordenes.Context; // Necesario para el DbContext (OrdenesDbContext)
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure; // Necesario para la configuración de MySQL
+using Microsoft.EntityFrameworkCore;
+using Ordenes.Context;
+using Ordenes.repositorios;
+using Ordenes.servicios;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,14 +22,22 @@ builder.Services.AddDbContext<OrdenesDbContext>(options =>
     )
 );
 
+builder.Services.AddScoped<IOrdenesServicio, OrdenesServicio>();
+builder.Services.AddScoped<IOrdenesRepositorio, OrdenesRepositorio>();
+
+builder.Services.AddHttpClient("ApiGateway", client =>
+{
+    client.BaseAddress = new Uri("http://apigateway:5000/");
+});
+
+builder.Services.AddControllers();
+
 // Add services to the container.
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// ====================================================================
-// 2. APLICACIÓN DE MIGRACIONES AL INICIO
-// ====================================================================
+app.MapControllers();
 ApplyMigrations(app);
 
 // Configure the HTTP request pipeline.
@@ -37,31 +47,8 @@ if (app.Environment.IsDevelopment())
 }
 
 
-// ... (Endpoints de ejemplo originales, como /weatherforecast) ...
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
-
 app.Run();
 
-// ====================================================================
-// MÉTODO AUXILIAR PARA APLICAR MIGRACIONES
-// ====================================================================
 static void ApplyMigrations(IApplicationBuilder app)
 {
     using (var scope = app.ApplicationServices.CreateScope())
@@ -83,9 +70,4 @@ static void ApplyMigrations(IApplicationBuilder app)
             // La configuración de RetryOnFailure en el AddDbContext ayuda a mitigar este error.
         }
     }
-}
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
