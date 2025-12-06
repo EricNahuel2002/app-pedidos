@@ -70,7 +70,6 @@ export class FormularioOrden implements OnInit {
       }else{
         this.ordenService.ConfirmarOrden(idMenu,this.idUsuario).subscribe({
         next: (data) => {
-          console.log("bien"); 
           this.router.navigate(['/'])
         },
         error : (err) => console.log(err)

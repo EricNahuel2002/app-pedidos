@@ -9,6 +9,7 @@ namespace Ordenes.servicios;
 public interface IOrdenesServicio
 {
     Task<bool> ConfirmarOrden(MenuCliente menuCliente);
+    Task<List<Orden>> ObtenerOrdenesDeCliente(int id);
 }
 public class OrdenesServicio : IOrdenesServicio
 {
@@ -39,5 +40,10 @@ public class OrdenesServicio : IOrdenesServicio
             FechaOrden = DateTime.UtcNow
         };
         return await this._ordenesRepositorio.ConfirmarOrden(orden);
+    }
+
+    public async Task<List<Orden>> ObtenerOrdenesDeCliente(int id)
+    {
+        return await this._ordenesRepositorio.ObtenerOrdenesDeCliente(id);
     }
 }

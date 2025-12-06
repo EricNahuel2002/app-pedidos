@@ -20,8 +20,8 @@ export const routes: Routes = [
     },
     {
         path : 'ordenes',
-        loadComponent : () => import("./componentes/orden/orden")
-        .then(c => c.Orden),
+        loadComponent : () => import("./componentes/ordenes/ordenes")
+        .then(c => c.Ordenes),
         canActivate : [authGuard]
     },
     {

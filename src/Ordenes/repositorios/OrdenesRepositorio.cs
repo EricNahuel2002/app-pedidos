@@ -1,4 +1,5 @@
-﻿using Ordenes.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using Ordenes.Context;
 using Ordenes.Entidad;
 using System.Threading.Tasks;
 
@@ -7,6 +8,7 @@ namespace Ordenes.repositorios;
 public interface IOrdenesRepositorio
 {
     Task<bool> ConfirmarOrden(Orden orden);
+    Task<List<Orden>> ObtenerOrdenesDeCliente(int id);
 }
 public class OrdenesRepositorio : IOrdenesRepositorio
 {
@@ -24,5 +26,12 @@ public class OrdenesRepositorio : IOrdenesRepositorio
 
         return filasAfectadas > 0;
 
+    }
+
+    public async Task<List<Orden>> ObtenerOrdenesDeCliente(int id)
+    {
+        return await this._context.Ordenes
+            .Where(o => o.IdUsuario == id)
+            .ToListAsync();
     }
 }
